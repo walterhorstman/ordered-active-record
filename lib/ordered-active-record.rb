@@ -1,7 +1,6 @@
 module OrderedActiveRecord
   def self.included(base)
     base.class_eval do
-      include OrderedActiveRecord
       cattr_accessor :ordered_columns
 
       def self.acts_as_ordered(column, options = {})
@@ -84,3 +83,5 @@ module OrderedActiveRecord
     end
   end
 end
+
+ActiveRecord::Base.send(:include, OrderedActiveRecord)

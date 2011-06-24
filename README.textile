@@ -1,0 +1,114 @@
+h1. Ordered Active Record (RubyOnRails 3)
+
+This gem allows you to have ordered models. It is like the old *acts_as_list*, but very lightweight and with an optimized SQL syntax.
+
+Suppose you want to order a Master model by position. You need to add a position column to the table _masters_ first.
+
+<pre>
+  class CreateMaster < ActiveRecord::Migration
+    def change
+      create_table :masters do |t|
+        ...
+        t.integer :position, :null => false
+      end
+    end
+  end
+</pre>
+
+You can make the position column optional: only records with entered positions will be ordered. In rare cases, you can also add extra order columns.
+
+To add ordering to a model, do the following:
+
+<pre>
+  class Master < ActiveRecord::Base
+    acts_as_ordered :position
+  end
+</pre>
+
+You can also order within the scope of other columns, which is useful for things like master-detail relations:
+
+<pre>
+  class Detail < ActiveRecord::Base
+    belongs_to :master
+    acts_as_ordered :position, :scope => :master_id
+  end
+</pre>
+
+This means the order positions are unique within the scope of the field _master_id_.
+
+h1. Examples
+
+Suppose you have these records (for all examples this is the starting point):
+
+<pre>
+  id | position
+  ---+---------
+   1 |        1
+   2 |        2
+   3 |        3
+</pre>
+
+h2. Scenario 1: insert a new record at position 2
+
+The existing records with position ≥ 2 will have their position increased by 1 and the new record (id 4) is inserted:
+
+<pre>
+  id | position
+  ---+---------
+   1 |        1
+   4 |        2
+   2 |        3
+   3 |        4
+</pre>
+
+h2. Scenario 2: delete the record at position 2
+
+The existing records with position ≥ 2 will have their position decreased by 1 and the record (id 2) is deleted:
+
+<pre>
+  id | position
+  ---+---------
+   1 |        1
+   3 |        2
+</pre>
+
+h2. Scenario 3: move the record down from position 1 to position 3
+
+The existing records with 2 ≥ position ≥ 3 will have their position decreased by 1 and the record (id 1) is moved down:
+
+<pre>
+  id | position
+  ---+---------
+   2 |        1
+   3 |        2
+   1 |        3
+</pre>
+
+h2. Scenario 4: move the record up from position 3 to position 1
+
+The existing records with 1 ≥ position ≥ 2 will have their position increased by 1 and the record (id 1) is moved up:
+
+<pre>
+  id | position
+  ---+---------
+   3 |        1
+   1 |        2
+   2 |        3
+</pre>
+
+h2. Scenario 5: create a new record at position 5
+
+This will create a gap in the position and is bad behavior. It is up to the developer, to avoid this situation. The plugin doesn't check the highest existing position (to avoid executing an extra query).
+
+<pre>
+  id | position
+  ---+---------
+   1 |        1
+   2 |        2
+   3 |        3
+   4 |        5
+</pre>
+
+h1. Copyright
+
+Copyright (c) 2011 Walter Horstman. See LICENSE.txt for further details.

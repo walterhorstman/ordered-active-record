@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ordered-active-record}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Walter Horstman"]
@@ -24,7 +24,9 @@ Gem::Specification.new do |s|
     "README.textile",
     "Rakefile",
     "VERSION",
+    "init.rb",
     "lib/ordered-active-record.rb",
+    "ordered-active-record.gemspec",
     "test/helper.rb",
     "test/test_ordered-active-record.rb"
   ]

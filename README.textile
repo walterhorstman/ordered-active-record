@@ -53,6 +53,8 @@ h2. Scenario 1: insert a new record at position 2
 The existing records with position ≥ 2 will have their position increased by 1 and the new record (id 4) is inserted:
 
 <pre>
+  Master.create(:position => 2)
+
   id | position
   ---+---------
    1 |        1
@@ -66,6 +68,8 @@ h2. Scenario 2: delete the record at position 2
 The existing records with position ≥ 2 will have their position decreased by 1 and the record (id 2) is deleted:
 
 <pre>
+  Master.find(2).destroy
+
   id | position
   ---+---------
    1 |        1
@@ -77,6 +81,8 @@ h2. Scenario 3: move the record down from position 1 to position 3
 The existing records with 2 ≥ position ≥ 3 will have their position decreased by 1 and the record (id 1) is moved down:
 
 <pre>
+  Master.find(1).update_attribute(:position, 3)
+
   id | position
   ---+---------
    2 |        1
@@ -86,9 +92,11 @@ The existing records with 2 ≥ position ≥ 3 will have their position decrease
 
 h2. Scenario 4: move the record up from position 3 to position 1
 
-The existing records with 1 ≥ position ≥ 2 will have their position increased by 1 and the record (id 1) is moved up:
+The existing records with 1 ≥ position ≥ 2 will have their position increased by 1 and the record (id 3) is moved up:
 
 <pre>
+  Master.find(3).update_attribute(:position, 1)
+
   id | position
   ---+---------
    3 |        1
@@ -101,6 +109,8 @@ h2. Scenario 5: create a new record at position 5
 This will create a gap in the position and is bad behavior. It is up to the developer, to avoid this situation. The plugin doesn't check the highest existing position (to avoid executing an extra query).
 
 <pre>
+  Master.create(:position => 5)
+
   id | position
   ---+---------
    1 |        1

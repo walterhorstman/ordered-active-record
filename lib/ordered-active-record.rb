@@ -1,3 +1,5 @@
+require 'ordered-active-record/version'
+
 module OrderedActiveRecord
   def self.included(base)
     base.class_eval do

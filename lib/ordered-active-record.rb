@@ -1,3 +1,4 @@
+require 'active_record'
 require 'ordered-active-record/version'
 
 module OrderedActiveRecord

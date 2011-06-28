@@ -104,7 +104,7 @@ The existing records with 1 ≥ position ≥ 2 will have their position increase
    2 |        3
 </pre>
 
-h2. Scenario 5: create a new record at position 5
+h2. Scenario 5: insert a new record at position 5
 
 This will create a gap in the position and is bad behavior. It is up to the developer, to avoid this situation. The plugin doesn't check the highest existing position (to avoid executing an extra query).
 

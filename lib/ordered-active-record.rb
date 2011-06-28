@@ -1,8 +1,7 @@
 require 'active_record'
+require 'ordered-active_record/version'
 
 module OrderedActiveRecord
-  VERSION = '0.4.0'
-
   def self.included(base)
     base.class_eval do
       cattr_accessor :ordered_columns

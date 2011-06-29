@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'ordered-active-record/version'
 
 Gem::Specification.new do |s|
   s.name        = 'ordered-active-record'
   s.version     = OrderedActiveRecord::VERSION
   s.authors     = ['Walter Horstman']
-  s.email       = 'walter.horstman@itonrails.com'
+  s.email       = ['walter.horstman@itonrails.com']
   s.homepage    = 'http://github.com/walterhorstman/ordered-active-record'
   s.summary     = 'Lightweight ordering of models in RubyOnRails 3'
   s.description = 'This gem allows you to have ordered models. It is like the old acts_as_list, but very lightweight and with an optimized SQL syntax.'

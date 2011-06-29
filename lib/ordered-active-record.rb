@@ -1,5 +1,4 @@
 require 'active_record'
-require 'ordered-active-record/version'
 
 module OrderedActiveRecord
   def self.included(base)
@@ -86,5 +85,3 @@ module OrderedActiveRecord
     end
   end
 end
-
-ActiveRecord::Base.send(:include, OrderedActiveRecord)

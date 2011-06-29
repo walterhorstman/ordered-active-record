@@ -121,4 +121,4 @@ This will create a gap in the position and is bad behavior. It is up to the deve
 
 h1. Copyright
 
-Copyright (c) 2011 Walter Horstman. See LICENSE.txt for further details.
+Copyright (c) 2011 Walter Horstman.

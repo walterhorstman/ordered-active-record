@@ -1,5 +1,5 @@
 require 'active_record'
-require 'ordered-active_record/version'
+require 'ordered-active-record/version'
 
 module OrderedActiveRecord
   def self.included(base)

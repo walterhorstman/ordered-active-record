@@ -67,7 +67,6 @@ module OrderedActiveRecord
           to = [value, value_was - 1].max
           sign = (value < value_was) ? '+' : '-'
           scope_for(instance).
-            where(@arel[:id].not_eq(instance.id)).
             where(@name => from.eql?(to) ? from : from..to).
             update_all("#{@quoted_name} = #{@quoted_name} #{sign} 1")
         end
@@ -85,3 +84,5 @@ module OrderedActiveRecord
     end
   end
 end
+
+ActiveRecord::Base.send(:include, OrderedActiveRecord)

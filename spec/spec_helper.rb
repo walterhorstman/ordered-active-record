@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../init"
+require 'ordered-active-record'
 
 ActiveRecord::Base.establish_connection(:adapter  => 'sqlite3',
                                         :database => File.dirname(__FILE__) + '/test.sqlite3')

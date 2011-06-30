@@ -51,5 +51,14 @@ describe 'A model Post' do
       @post2.reload.position.should == 2
       @post3.reload.position.should == 3
     end
+
+    it 'should prevent adding ordered columns twice or more' do
+      Post.send(:acts_as_ordered, :position)
+      post = Post.create(:text => '4th post', :position => 2)
+      post.position.should == 2
+      @post1.reload.position.should == 1
+      @post2.reload.position.should == 3
+      @post3.reload.position.should == 4
+    end
   end
 end

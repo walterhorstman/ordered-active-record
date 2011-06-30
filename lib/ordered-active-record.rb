@@ -1,12 +1,10 @@
-require 'active_record'
-
 module OrderedActiveRecord
   def self.included(base)
     base.class_eval do
       cattr_accessor :ordered_columns
 
       def self.acts_as_ordered(column, options = {})
-        # add ordering hooks when first column is added
+        # add hooks methods when first column is added
         if self.ordered_columns.nil?
           self.ordered_columns = []
           [:create, :destroy, :update].each do |hook|
@@ -18,7 +16,7 @@ module OrderedActiveRecord
           end
         end
 
-        self.ordered_columns << Column.new(self, column, options)
+        self.ordered_columns << OrderedActiveRecord::Column.new(self, column, options)
       end
     end
   end
@@ -85,4 +83,5 @@ module OrderedActiveRecord
   end
 end
 
+require 'active_record'
 ActiveRecord::Base.send(:include, OrderedActiveRecord)

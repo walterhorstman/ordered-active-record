@@ -14,9 +14,9 @@ module OrderedActiveRecord
               end
             end
           end
+          self.ordered_columns << OrderedActiveRecord::Column.new(self, column, options)
         end
 
-        self.ordered_columns << OrderedActiveRecord::Column.new(self, column, options)
       end
     end
   end

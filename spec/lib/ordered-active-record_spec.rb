@@ -1,7 +1,25 @@
-require 'spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe 'A model Post' do
-  context 'with acts_as_ordered enabled on column "position"' do
+class Post < ActiveRecord::Base
+  include OrderedActiveRecord
+  acts_as_ordered :position
+end
+
+describe 'A class Post' do
+  it 'should be a subclass of ActiveRecord::Base' do
+    Post.new.should be_an(ActiveRecord::Base)
+  end
+
+  it 'should have a class method acts_as_ordered' do
+    Post.should respond_to(:acts_as_ordered)
+  end
+
+  it 'should prevent adding ordered columns twice or more' do
+    Post.send(:acts_as_ordered, :position)
+    Post.ordered_columns.keys.size.should == 1
+  end
+
+  describe 'with acts_as_ordered active on column "position"' do
     before do
       @post1 = Post.create(:text => '1st post', :position => 1)
       @post2 = Post.create(:text => '2nd post', :position => 2)
@@ -10,7 +28,6 @@ describe 'A model Post' do
 
     it 'should insert a record with position 2' do
       post = Post.create(:text => '4th post', :position => 2)
-      post.position.should == 2
       @post1.reload.position.should == 1
       @post2.reload.position.should == 3
       @post3.reload.position.should == 4
@@ -23,22 +40,22 @@ describe 'A model Post' do
     end
 
     it 'should move the record down from position 1 to position 2' do
-      @post1.update_attributes({'position' => 2})
+      @post1.update_attributes(:position => 2)
       @post1.reload.position.should == 2
       @post2.reload.position.should == 1
       @post3.reload.position.should == 3
     end
 
-    it 'should move up and down from position 1 to position 2 and back' do
-      @post1.update_attributes({'position' => 2})
-      @post1.reload.update_attributes({'position' => 1})
+    it 'should move up and down from position 1 to position 2 and back'do
+      @post1.update_attributes(:position => 2)
+      @post1.update_attributes(:position => 1)
       @post1.reload.position.should == 1
       @post2.reload.position.should == 2
       @post3.reload.position.should == 3
     end
 
     it 'should move the record up from position 3 to position 1' do
-      @post3.update_attributes({'position' => 1})
+      @post3.update_attributes(:position => 1)
       @post1.reload.position.should == 2
       @post2.reload.position.should == 3
       @post3.reload.position.should == 1
@@ -50,15 +67,6 @@ describe 'A model Post' do
       @post1.reload.position.should == 1
       @post2.reload.position.should == 2
       @post3.reload.position.should == 3
-    end
-
-    it 'should prevent adding ordered columns twice or more' do
-      Post.send(:acts_as_ordered, :position)
-      post = Post.create(:text => '4th post', :position => 2)
-      post.position.should == 2
-      @post1.reload.position.should == 1
-      @post2.reload.position.should == 3
-      @post3.reload.position.should == 4
     end
   end
 end

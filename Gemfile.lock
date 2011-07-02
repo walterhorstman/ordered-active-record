@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ordered-active-record (0.6.1)
+    ordered-active-record (0.7.0)
 
 GEM
   remote: http://rubygems.org/

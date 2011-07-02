@@ -1,3 +1,4 @@
+require 'active_record'
 require 'ordered-active-record'
 
 ActiveRecord::Base.establish_connection(:adapter  => 'sqlite3',
@@ -9,9 +10,4 @@ ActiveRecord::Schema.define do
     t.string  :text,     :null => false
     t.integer :position, :null => false
   end
-end
-
-# create "Post" model
-class Post < ActiveRecord::Base
-  acts_as_ordered :position
 end

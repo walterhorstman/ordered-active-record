@@ -31,6 +31,7 @@ You can also order within the scope of other columns, which is useful for things
 
 <pre>
   class Detail < ActiveRecord::Base
+    include OrderedActiveRecord
     belongs_to :post
     acts_as_ordered :position, :scope => :post_id
   end

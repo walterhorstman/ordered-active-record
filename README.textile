@@ -21,17 +21,14 @@ To add ordering to a model, do the following:
 
 <pre>
   class Post < ActiveRecord::Base
-    include OrderedActiveRecord
     acts_as_ordered :position
   end
 </pre>
 
-Unfortunately, a manual inclusion of the module is required, because of problems with automatic inclusion in Rails 3.1.rc4.
 You can also order within the scope of other columns, which is useful for things like master-detail relations:
 
 <pre>
   class Detail < ActiveRecord::Base
-    include OrderedActiveRecord
     belongs_to :post
     acts_as_ordered :position, :scope => :post_id
   end

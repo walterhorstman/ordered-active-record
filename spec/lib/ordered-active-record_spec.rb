@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class Post < ActiveRecord::Base
-  include OrderedActiveRecord
   acts_as_ordered :position
 end
 
@@ -12,11 +11,6 @@ describe 'A class Post' do
 
   it 'should have a class method acts_as_ordered' do
     Post.should respond_to(:acts_as_ordered)
-  end
-
-  it 'should prevent adding ordered columns twice or more' do
-    Post.send(:acts_as_ordered, :position)
-    Post.ordered_columns.keys.size.should == 1
   end
 
   describe 'with acts_as_ordered active on column "position"' do

@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    ordered-active-record (0.7.0)
+    ordered-active-record (0.8.0)
+      activerecord (~> 3)
 
 GEM
   remote: http://rubygems.org/
@@ -35,8 +36,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
-  bundler
   ordered-active-record!
   rspec
   sqlite3

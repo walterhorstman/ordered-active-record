@@ -3,11 +3,11 @@ module OrderedActiveRecord
     base.class_eval do
       def self.acts_as_ordered(column, options = {})
         before_create do
-          insert_ordered_position(column, options)
+          reorder_positions(column, :insert, options)
         end
 
         before_destroy do
-          remove_ordered_position(column, options)
+          reorder_positions(column, :remove, options)
         end
 
         before_update do
@@ -17,10 +17,10 @@ module OrderedActiveRecord
 
             # column changes from not nil to nil, which is like removing it
             if position.nil?
-              remove_ordered_position(column, options)
+              reorder_positions(column, :remove, options)
             # column changes from nil to not nil, which is like inserting it
             elsif position_was.nil?
-              insert_ordered_position(column, options)
+              reorder_positions(column, :insert, options)
             elsif position.present? && position_was.present?
               from = [position, position_was + 1].min
               to = [position, position_was - 1].max
@@ -35,21 +35,13 @@ module OrderedActiveRecord
 
     private
 
-      def insert_ordered_position(column, options)
-        position = self.send(column)
+      def reorder_positions(column, action, options)
+        position = self.send(:insert.eql?(action) ? column : :"#{column}_was")
         if position.present?
+          sign = :insert.eql?(action) ? '+' : '-'
           scope_for(column, options).
           where(["#{column} >= :position", :position => position]).
-          update_all("#{column} = #{column} + 1")
-        end
-      end
-
-      def remove_ordered_position(column, options)
-        position_was = self.send(:"#{column}_was")
-        if position_was.present?
-          scope_for(column, options).
-          where(["#{column} >= :position", :position => position_was]).
-          update_all("#{column} = #{column} - 1")
+          update_all("#{column} = #{column} #{sign} 1")
         end
       end
 

@@ -18,7 +18,7 @@ module OrderedActiveRecord
               reorder_positions(column, :remove, options)
             elsif position_was.nil?
               reorder_positions(column, :insert, options)
-            elsif position.present? && position_was.present?
+            else
               from = [position, position_was + 1].min
               to = [position, position_was - 1].max
               sign = (position < position_was) ? '+' : '-'

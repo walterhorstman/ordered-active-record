@@ -8,6 +8,6 @@ ActiveRecord::Base.establish_connection(:adapter  => 'sqlite3',
 ActiveRecord::Schema.define do
   create_table :posts, :force => true do |t|
     t.string  :text,     :null => false
-    t.integer :position, :null => false
+    t.integer :position
   end
 end

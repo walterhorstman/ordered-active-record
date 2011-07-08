@@ -119,6 +119,21 @@ This will create a gap in the position and is bad behavior. It is up to the deve
    4 |        5
 </pre>
 
+h2. Scenario 6: insert a new record at position nil
+
+This will not affect the other records.
+
+<pre>
+  Post.create(:position => nil)
+
+  id | position
+  ---+---------
+   1 |        1
+   2 |        2
+   3 |        3
+   4 |      nil
+</pre>
+
 h1. Copyright
 
 Copyright (c) 2011 Walter Horstman.

@@ -62,5 +62,32 @@ describe 'A class Post' do
       @post2.reload.position.should == 2
       @post3.reload.position.should == 3
     end
+
+    it 'should do nothing when a record without position is created' do
+      post = Post.create(:text => '4th post')
+      post.position.should == nil
+      @post1.reload.position.should == 1
+      @post2.reload.position.should == 2
+      @post3.reload.position.should == 3
+    end
+
+    it 'should reorder when one record has its position cleared' do
+      @post1.update_attributes(:position => nil)
+      @post2.reload.position.should == 1
+      @post3.reload.position.should == 2
+    end
+
+    it 'should reorder when one record has its position filled' do
+      post = Post.create(:text => '4th post')
+      post.position.should == nil
+      @post1.reload.position.should == 1
+      @post2.reload.position.should == 2
+      @post3.reload.position.should == 3
+      post.update_attributes(:position => 2)
+      post.position.should == 2
+      @post1.reload.position.should == 1
+      @post2.reload.position.should == 3
+      @post3.reload.position.should == 4
+    end
   end
 end

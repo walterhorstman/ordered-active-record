@@ -12,22 +12,17 @@ module OrderedActiveRecord
 
         before_update do
           if self.send(:"#{column}_changed?")
-            position = self.send(column)
-            position_was = self.send(:"#{column}_was")
+            position_was, position = self.send("#{column}_change")
 
-            # column changes from not nil to nil, which is like removing it
             if position.nil?
               reorder_positions(column, :remove, options)
-            # column changes from nil to not nil, which is like inserting it
             elsif position_was.nil?
               reorder_positions(column, :insert, options)
             elsif position.present? && position_was.present?
               from = [position, position_was + 1].min
               to = [position, position_was - 1].max
               sign = (position < position_was) ? '+' : '-'
-              scope_for(column, options).
-              where(column => from.eql?(to) ? from : from..to).
-              update_all("#{column} = #{column} #{sign} 1")
+              scope_for(column, options).where(column => from.eql?(to) ? from : from..to).update_all("#{column} = #{column} #{sign} 1")
             end
           end
         end
@@ -39,9 +34,7 @@ module OrderedActiveRecord
         position = self.send(:insert.eql?(action) ? column : :"#{column}_was")
         if position.present?
           sign = :insert.eql?(action) ? '+' : '-'
-          scope_for(column, options).
-          where(["#{column} >= :position", :position => position]).
-          update_all("#{column} = #{column} #{sign} 1")
+          scope_for(column, options).where(["#{column} >= :position", :position => position]).update_all("#{column} = #{column} #{sign} 1")
         end
       end
 

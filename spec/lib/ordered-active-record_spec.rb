@@ -4,16 +4,13 @@ class Post < ActiveRecord::Base
   acts_as_ordered :position
 end
 
+class PostWithScope < ActiveRecord::Base
+  set_table_name 'posts'
+  acts_as_ordered :position, :scope => :author_id
+end
+
 describe 'A class Post' do
-  it 'should be a subclass of ActiveRecord::Base' do
-    Post.new.should be_an(ActiveRecord::Base)
-  end
-
-  it 'should have a class method acts_as_ordered' do
-    Post.should respond_to(:acts_as_ordered)
-  end
-
-  describe 'with acts_as_ordered active on column "position"' do
+  describe 'with acts_as_ordered on column "position"' do
     before do
       @post1 = Post.create(:text => '1st post', :position => 1)
       @post2 = Post.create(:text => '2nd post', :position => 2)
@@ -22,6 +19,7 @@ describe 'A class Post' do
 
     it 'should insert a record with position 2' do
       post = Post.create(:text => '4th post', :position => 2)
+      post.position.should == 2
       @post1.reload.position.should == 1
       @post2.reload.position.should == 3
       @post3.reload.position.should == 4
@@ -88,6 +86,22 @@ describe 'A class Post' do
       @post1.reload.position.should == 1
       @post2.reload.position.should == 3
       @post3.reload.position.should == 4
+    end
+  end
+
+  describe 'with acts_as_ordered on column "position" and scoping on "author_id"' do
+    before do
+      @post1 = PostWithScope.create(:text => '1st post', :position => 1)
+      @post2 = PostWithScope.create(:text => '1nd post for post 1', :position => 1, :author_id => 1)
+      @post3 = PostWithScope.create(:text => '2nd post for post 1', :position => 2, :author_id => 1)
+    end
+
+    it 'should insert a record with position 1' do
+      post = PostWithScope.create(:text => '3th post for post 1', :position => 1, :author_id => 1)
+      post.position.should == 1
+      @post1.reload.position.should == 1
+      @post2.reload.position.should == 2
+      @post3.reload.position.should == 3
     end
   end
 end

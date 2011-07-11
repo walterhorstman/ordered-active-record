@@ -9,5 +9,6 @@ ActiveRecord::Schema.define do
   create_table :posts, :force => true do |t|
     t.string  :text,     :null => false
     t.integer :position
+    t.integer :author_id
   end
 end

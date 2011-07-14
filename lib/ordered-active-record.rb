@@ -34,7 +34,7 @@ module OrderedActiveRecord
         position = self.send(:insert.eql?(action) ? column : :"#{column}_was")
         if position.present?
           sign = :insert.eql?(action) ? '+' : '-'
-          scope_for(column, options).where(["#{column} >= :position", :position => position]).update_all("#{column} = #{column} #{sign} 1")
+          scope_for(column, options).where(["#{column} >= ?", position]).update_all("#{column} = #{column} #{sign} 1")
         end
       end
 

@@ -92,16 +92,40 @@ describe 'A class Post' do
   describe 'with acts_as_ordered on column "position" and scoping on "author_id"' do
     before do
       @post1 = PostWithScope.create(:text => '1st post', :position => 1)
-      @post2 = PostWithScope.create(:text => '1nd post for post 1', :position => 1, :author_id => 1)
-      @post3 = PostWithScope.create(:text => '2nd post for post 1', :position => 2, :author_id => 1)
+      @post2 = PostWithScope.create(:text => '1nd post for author 1', :position => 1, :author_id => 1)
+      @post3 = PostWithScope.create(:text => '2nd post for author 1', :position => 2, :author_id => 1)
     end
 
     it 'should insert a record with position 1' do
-      post = PostWithScope.create(:text => '3th post for post 1', :position => 1, :author_id => 1)
+      post = PostWithScope.create(:text => '3th post for author 1', :position => 1, :author_id => 1)
       post.position.should == 1
       @post1.reload.position.should == 1
       @post2.reload.position.should == 2
       @post3.reload.position.should == 3
+    end
+  end
+end
+ 
+class Animal < ActiveRecord::Base
+  acts_as_ordered :ordering
+end
+
+class Cat < Animal
+end
+
+class Dog < Animal
+end
+
+describe 'A class Animal' do
+  describe 'with acts_as_ordered on column "ordering"' do
+    before do
+      @cat = Cat.create(:sound => 'Miaow', :ordering => 1)
+    end
+
+    it 'should insert each animal in global order' do
+      dog = Dog.create(:sound => 'Bark', :ordering => 1)
+      dog.ordering.should == 1
+      @cat.reload.ordering.should == 2
     end
   end
 end

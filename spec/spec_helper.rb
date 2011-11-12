@@ -12,3 +12,12 @@ ActiveRecord::Schema.define do
     t.integer :author_id
   end
 end
+
+# create "animals" table
+ActiveRecord::Schema.define do
+  create_table :animals, :force => true do |t|
+    t.string  :type,     :null => false
+    t.string  :sound,    :null => false
+    t.integer :ordering
+  end
+end

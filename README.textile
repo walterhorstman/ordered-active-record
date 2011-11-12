@@ -38,6 +38,8 @@ This means the order positions are unique within the scope of the field _post_id
 
 h1. Examples
 
+Check out the tests (in spec/lib/ordered-active-record.rb) to see more examples.
+
 Suppose you have these records (for all examples this is the starting point):
 
 <pre>

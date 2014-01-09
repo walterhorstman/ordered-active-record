@@ -3,26 +3,25 @@ module OrderedActiveRecord
     base.class_eval do
       def self.acts_as_ordered(column, options = {})
         before_create do
-          reorder_positions(column, :insert, options)
+          reorder_positions(column, self.send(column), :insert, options)
         end
 
         before_destroy do
-          reorder_positions(column, :remove, options)
+          reorder_positions(column, self.send("#{column}_was"), :remove, options)
         end
 
         before_update do
           if self.send(:"#{column}_changed?")
-            position_was, position = self.send("#{column}_change")
+            position_old, position_new = self.send("#{column}_change")
 
-            if position.nil?
-              reorder_positions(column, :remove, options)
-            elsif position_was.nil?
-              reorder_positions(column, :insert, options)
+            if position_new.nil?
+              reorder_positions(column, self.send("#{column}_was"), :remove, options)
+            elsif position_old.nil?
+              reorder_positions(column, self.send(column), :insert, options)
             else
-              from = [position, position_was + 1].min
-              to = [position, position_was - 1].max
-              sign = (position < position_was) ? '+' : '-'
-              scope_for(column, options).where(column => from.eql?(to) ? from : from..to).update_all("#{column} = #{column} #{sign} 1")
+              from = [position_new, position_old + 1].min
+              to = [position_new, position_old - 1].max
+              scope_for(column, options).where(column => from.eql?(to) ? from : from..to).update_all("#{column} = #{column} #{(position_new < position_old) ? '+' : '-'} 1")
             end
           end
         end
@@ -30,11 +29,9 @@ module OrderedActiveRecord
 
     private
 
-      def reorder_positions(column, action, options)
-        position = self.send(:insert.eql?(action) ? column : :"#{column}_was")
+      def reorder_positions(column, position, action, options)
         if position.present?
-          sign = :insert.eql?(action) ? '+' : '-'
-          scope_for(column, options).where(["#{column} >= ?", position]).update_all("#{column} = #{column} #{sign} 1")
+          scope_for(column, options).where(["#{column} >= ?", position]).update_all("#{column} = #{column} #{:insert.eql?(action) ? '+' : '-'} 1")
         end
       end
 

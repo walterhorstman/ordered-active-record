@@ -52,7 +52,7 @@ Suppose you have these records (for all examples this is the starting point):
 The existing records with position greater than or equal to 2 will have their
 position increased by 1 and the new record (with id 4) is inserted:
 
-    Post.create(:position => 2)
+    Post.create(position: 2)
 
     id | position
     ---+---------

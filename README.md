@@ -1,4 +1,4 @@
-# Ordered Active Record (RubyOnRails 3)
+# Ordered Active Record (for ActiveRecord 3 or higher)
 
 This gem allows you to have ordered models. It is like the old *acts_as_list*
 gem, but very lightweight and with an optimized SQL syntax.
@@ -8,9 +8,9 @@ Suppose you want to order a Post model by position. You need to add a
 
     class CreatePost < ActiveRecord::Migration
       def change
-        create_table :posts do |t|
+        create_table(:posts) do |t|
           ...
-          t.integer :position, :null => false
+          t.integer(:position, null: false)
         end
       end
     end
@@ -21,15 +21,15 @@ positions will be ordered. In rare cases, you can also add extra order columns.
 To add ordering to a model, do the following:
 
     class Post < ActiveRecord::Base
-      acts_as_ordered :position
+      acts_as_ordered(:position)
     end
 
 You can also order within the scope of other columns, which is useful for
 things like associations:
 
     class Detail < ActiveRecord::Base
-      belongs_to :post
-      acts_as_ordered :position, :scope => :post_id
+      belongs_to(:post)
+      acts_as_ordered(:position, scope: :post_id)
     end
 
 This means the order positions are unique within the scope of `post_id`.
@@ -79,7 +79,7 @@ position decreased by 1 and the record (with id 2) is deleted:
 The existing record with position equal to 2 will have its position decreased
 by 1 and the record (with id 1) is moved down:
 
-    Post.find(1).update_attributes(:position => 2)
+    Post.find(1).update_attributes(position: 2)
 
     id | position
     ---+---------
@@ -93,7 +93,7 @@ The existing records with position greater than or equal to 1 and less than or
 equal to 2 will have their position increased by 1 and the record (with id 3)
 is moved up:
 
-    Post.find(3).update_attributes(:position => 1)
+    Post.find(3).update_attributes(position: 1)
 
     id | position
     ---+---------
@@ -107,7 +107,7 @@ This will create a gap in the positions and is bad behavior. It is the task of
 the developer to avoid this situation. The gem doesn't check the highest
 existing position (to avoid execution of an extra query).
 
-    Post.create(:position => 5)
+    Post.create(position: 5)
 
     id | position
     ---+---------
@@ -121,7 +121,7 @@ existing position (to avoid execution of an extra query).
 
 This will not affect the other records.
 
-    Post.create(:position => nil)
+    Post.create(position: nil)
 
     id | position
     ---+---------
@@ -134,7 +134,7 @@ This will not affect the other records.
 
 Clearing a record's position, is like deleting its position.
 
-    Post.find(1).update_attributes(:position => nil)
+    Post.find(1).update_attributes(position: nil)
 
     id | position
     ---+---------
@@ -144,4 +144,4 @@ Clearing a record's position, is like deleting its position.
 
 # Copyright
 
-&copy; 2011-2012 Walter Horstman, [IT on Rails](http://itonrails.com)
+&copy; 2011-2014 Walter Horstman, [IT on Rails](http://itonrails.com)

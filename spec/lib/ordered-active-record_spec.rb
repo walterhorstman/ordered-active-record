@@ -104,8 +104,19 @@ describe('A class Post') do
       @post3.reload.position.should be(3)
     end
   end
+
+  describe 'with alternative starting positions' do
+    it 'should insert a record with position 10' do
+      post1 = Post.create(text: '1st post', position: 10)
+      post2 = Post.create(text: '1st post', position: 11)
+      post3 = Post.create(text: '1st post', position: 10)
+      post1.reload.position.should be(11)
+      post2.reload.position.should be(12)
+      post3.reload.position.should be(10)
+    end
+  end
 end
- 
+
 class Animal < ActiveRecord::Base
   acts_as_ordered(:ordering)
 end

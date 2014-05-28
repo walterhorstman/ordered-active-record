@@ -108,8 +108,8 @@ describe('A class Post') do
   describe 'with alternative starting positions' do
     it 'should insert a record with position 10' do
       post1 = Post.create(text: '1st post', position: 10)
-      post2 = Post.create(text: '1st post', position: 11)
-      post3 = Post.create(text: '1st post', position: 10)
+      post2 = Post.create(text: '2nd post', position: 11)
+      post3 = Post.create(text: '3rd post', position: 10)
       post1.reload.position.should be(11)
       post2.reload.position.should be(12)
       post3.reload.position.should be(10)

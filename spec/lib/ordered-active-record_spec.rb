@@ -1,12 +1,12 @@
 require(File.expand_path(File.dirname(__FILE__) + '/../spec_helper'))
 
 class Post < ActiveRecord::Base
-  self.acts_as_ordered(:position)
+  acts_as_ordered(:position)
 end
 
 class PostWithScope < ActiveRecord::Base
   self.table_name = 'posts'
-  self.acts_as_ordered(:position, scope: :author_id)
+  acts_as_ordered(:position, scope: :author_id)
 end
 
 describe('A class Post') do
@@ -19,73 +19,73 @@ describe('A class Post') do
 
     it('should insert a record with position 2') do
       post = Post.create(text: '4th post', position: 2)
-      post.position.should be(2)
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(3)
-      @post3.reload.position.should be(4)
+      expect(post.position).to be(2)
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(3)
+      expect(@post3.reload.position).to be(4)
     end
 
     it('should delete a record at position 2') do
       @post2.destroy
-      @post1.reload.position.should be(1)
-      @post3.reload.position.should be(2)
+      expect(@post1.reload.position).to be(1)
+      expect(@post3.reload.position).to be(2)
     end
 
     it('should move the record down from position 1 to position 2') do
       @post1.update_attributes(position: 2)
-      @post1.reload.position.should be(2)
-      @post2.reload.position.should be(1)
-      @post3.reload.position.should be(3)
+      expect(@post1.reload.position).to be(2)
+      expect(@post2.reload.position).to be(1)
+      expect(@post3.reload.position).to be(3)
     end
 
     it('should move up and down from position 1 to position 2 and back') do
       @post1.update_attributes(position: 2)
       @post1.update_attributes(position: 1)
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(2)
-      @post3.reload.position.should be(3)
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(2)
+      expect(@post3.reload.position).to be(3)
     end
 
     it('should move the record up from position 3 to position 1') do
       @post3.update_attributes(position: 1)
-      @post1.reload.position.should be(2)
-      @post2.reload.position.should be(3)
-      @post3.reload.position.should be(1)
+      expect(@post1.reload.position).to be(2)
+      expect(@post2.reload.position).to be(3)
+      expect(@post3.reload.position).to be(1)
     end
 
     it('should insert a record with position 5') do
       post = Post.create(text: '4th post', position: 5)
-      post.position.should be(5)
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(2)
-      @post3.reload.position.should be(3)
+      expect(post.position).to be(5)
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(2)
+      expect(@post3.reload.position).to be(3)
     end
 
     it('should do nothing when a record without position is created') do
       post = Post.create(text: '4th post')
-      post.position.should be_nil
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(2)
-      @post3.reload.position.should be(3)
+      expect(post.position).to be_nil
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(2)
+      expect(@post3.reload.position).to be(3)
     end
 
     it('should reorder when one record has its position cleared') do
       @post1.update_attributes(position: nil)
-      @post2.reload.position.should be(1)
-      @post3.reload.position.should be(2)
+      expect(@post2.reload.position).to be(1)
+      expect(@post3.reload.position).to be(2)
     end
 
     it('should reorder when one record has its position filled') do
       post = Post.create(text: '4th post')
-      post.position.should be_nil
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(2)
-      @post3.reload.position.should be(3)
+      expect(post.position).to be_nil
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(2)
+      expect(@post3.reload.position).to be(3)
       post.update_attributes(position: 2)
-      post.position.should be(2)
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(3)
-      @post3.reload.position.should be(4)
+      expect(post.position).to be(2)
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(3)
+      expect(@post3.reload.position).to be(4)
     end
   end
 
@@ -98,10 +98,10 @@ describe('A class Post') do
 
     it 'should insert a record with position 1' do
       post = PostWithScope.create(text: '3th post for author 1', position: 1, author_id: 1)
-      post.position.should be(1)
-      @post1.reload.position.should be(1)
-      @post2.reload.position.should be(2)
-      @post3.reload.position.should be(3)
+      expect(post.position).to be(1)
+      expect(@post1.reload.position).to be(1)
+      expect(@post2.reload.position).to be(2)
+      expect(@post3.reload.position).to be(3)
     end
   end
 
@@ -110,9 +110,9 @@ describe('A class Post') do
       post1 = Post.create(text: '1st post', position: 10)
       post2 = Post.create(text: '2nd post', position: 11)
       post3 = Post.create(text: '3rd post', position: 10)
-      post1.reload.position.should be(11)
-      post2.reload.position.should be(12)
-      post3.reload.position.should be(10)
+      expect(post1.reload.position).to be(11)
+      expect(post2.reload.position).to be(12)
+      expect(post3.reload.position).to be(10)
     end
   end
 end
@@ -135,8 +135,8 @@ describe 'A class Animal' do
 
     it('should insert each animal in global order') do
       dog = Dog.create(sound: 'Bark', ordering: 1)
-      dog.ordering.should be(1)
-      @cat.reload.ordering.should be(2)
+      expect(dog.ordering).to be(1)
+      expect(@cat.reload.ordering).to be(2)
     end
   end
 end

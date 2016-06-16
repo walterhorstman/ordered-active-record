@@ -1,7 +1,7 @@
 require(File.expand_path(File.dirname(__FILE__) + '/../spec_helper'))
 
 class Post < ActiveRecord::Base
-  acts_as_ordered(:position)
+  acts_as_ordered
 end
 
 class PostWithScope < ActiveRecord::Base

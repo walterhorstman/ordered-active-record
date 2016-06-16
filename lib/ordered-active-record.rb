@@ -1,7 +1,7 @@
 module OrderedActiveRecord
   def self.included(base)
     base.class_eval do
-      def self.acts_as_ordered(column, options = {})
+      def self.acts_as_ordered(column = :position, options = {})
         before_create do
           reorder_positions(column, send(column), true, options)
         end

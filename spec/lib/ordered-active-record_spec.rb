@@ -69,6 +69,12 @@ describe('A class Post') do
       expect(@post3.reload.position).to be(3)
     end
 
+    it('should do nothing when a record is changed but its position not') do
+      post = Post.create(text: 'Initial text', position: 1)
+      post.update_attribute(:text, 'Changed text')
+      expect(post.reload.position).to be(1)
+    end
+
     it('should reorder when one record has its position cleared') do
       @post1.update_attributes(position: nil)
       expect(@post2.reload.position).to be(1)

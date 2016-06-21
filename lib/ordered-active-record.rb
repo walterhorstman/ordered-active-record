@@ -11,19 +11,19 @@ module OrderedActiveRecord
         end
 
         before_update do
-          return unless send(:"#{column}_changed?")
-
-          position_old, position_new = send("#{column}_change")
-          if position_new.nil?
-            reorder_positions(column, send("#{column}_was"), false, options)
-          elsif position_old.nil?
-            reorder_positions(column, send(column), true, options)
-          else
-            from = [position_new, position_old + 1].min
-            to = [position_new, position_old - 1].max
-            scope_for(column, options)
-              .where(column => from.eql?(to) ? from : from..to)
-              .update_all("#{column} = #{column} #{(position_new < position_old) ? '+' : '-'} 1")
+          if send(:"#{column}_changed?")
+            position_old, position_new = send("#{column}_change")
+            if position_new.nil?
+              reorder_positions(column, send("#{column}_was"), false, options)
+            elsif position_old.nil?
+              reorder_positions(column, send(column), true, options)
+            else
+              from = [position_new, position_old + 1].min
+              to = [position_new, position_old - 1].max
+              scope_for(column, options)
+                .where(column => from.eql?(to) ? from : from..to)
+                .update_all("#{column} = #{column} #{(position_new < position_old) ? '+' : '-'} 1")
+            end
           end
         end
       end

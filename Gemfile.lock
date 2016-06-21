@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ordered-active-record (0.9.9)
+    ordered-active-record (0.9.10)
       activerecord (>= 3)
 
 GEM

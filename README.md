@@ -1,3 +1,6 @@
+**Please use the `acts_as_positioned` gem from now on.**
+**Amongst other things, it should be better with scoped positions.**
+
 # Ordered Active Record (for ActiveRecord 3 or higher)
 
 This gem allows you to have ordered models. It is like the old *acts_as_list*
